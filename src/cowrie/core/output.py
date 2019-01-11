@@ -70,7 +70,12 @@ def convert(input):
     elif isinstance(input, list):
         return [convert(element) for element in input]
     elif isinstance(input, bytes):
-        return input.decode('utf-8')
+        # Sometimes input sent is binary that does not conform to utf-8
+        try:
+            output = input.decode('utf-8')
+        except exceptions.UnicodeDecodeError:
+            output = input.decode('unicode_escape')
+        return output
     else:
         return input
 
